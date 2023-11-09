@@ -1,0 +1,40 @@
+<div>
+    <div>
+        <h1>Login</h1>
+    </div>
+    <div>
+        <mat-form-field class="input-field-container">
+            <mat-label>Username</mat-label>
+            <input
+                type="text"
+                matInput
+                [(ngModel)]="username"
+            />
+        </mat-form-field>
+        <mat-error *ngIf="usernameValidationMessage">{{
+            usernameValidationMessage
+        }}</mat-error>
+    </div>
+    <div>
+        <mat-form-field class="input-field-container">
+            <mat-label>Password</mat-label>
+            <input
+                type="password"
+                matInput
+                [(ngModel)]="password"
+            />
+        </mat-form-field>
+        <mat-error *ngIf="passwordValidationMessage">{{
+            passwordValidationMessage
+        }}</mat-error>
+    </div>
+    <div>
+        <button
+            mat-raised-button
+            color="primary"
+            (click)="validateInput()"
+        >
+            Log in
+        </button>
+    </div>
+</div>
