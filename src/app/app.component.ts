@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterOutlet } from '@angular/router'
+import { RouterModule, Routes } from '@angular/router'
 import { UserTableComponent } from './user-table/user-table.component'
 import { LoginComponent } from './login/login.component'
 import { FormComponent } from './form/form.component'
@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button'
     standalone: true,
     imports: [
         CommonModule,
-        RouterOutlet,
+        RouterModule,
         UserTableComponent,
         LoginComponent,
         FormComponent,
@@ -33,18 +33,22 @@ export class AppComponent implements OnInit {
         this.storageService.setData('userData', initialData)
 
         if (this.storageService.getData('isLoggedIn') != null) {
-            this.isLoggedIn = this.storageService.getData('isLoggedIn')
+            this.isLoggedIn =
+                this.storageService.getData('isLoggedIn') === 'false'
+                    ? false
+                    : true
         } else {
             this.storageService.setData('isLoggedIn', 'false')
         }
     }
 
-    receiveDataFromChild(data: boolean): void {
+    changeLoginStatus(data: boolean): void {
         this.isLoggedIn = data
+        this.storageService.setData('isLoggedIn', data.toString())
     }
 
     logout() {
-        this.storageService.setData('isLoggedIn', 'false')
         this.isLoggedIn = false
+        this.storageService.setData('isLoggedIn', 'false')
     }
 }

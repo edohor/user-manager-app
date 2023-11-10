@@ -28,13 +28,20 @@
     </button>
     <div class="content">
         <div *ngIf="!isLoggedIn; else loggedIn">
-            <app-login (loginStatus)="receiveDataFromChild($event)"></app-login>
+            <app-login (loginStatus)="changeLoginStatus($event)"></app-login>
         </div>
         <ng-template #loggedIn>
-            <app-user-table></app-user-table>
-            <app-form></app-form>
+            <!-- <app-user-table></app-user-table> -->
+            <!-- <app-form></app-form> -->
+            <router-outlet></router-outlet>
         </ng-template>
     </div>
 </main>
 
-<router-outlet></router-outlet>
+<!-- <nav>
+    <a routerLink="/login">Login</a>
+    <a routerLink="/list">List</a>
+    <a routerLink="/add">Add</a>
+    <a routerLink="/edit">Edit</a>
+</nav>
+<router-outlet></router-outlet> -->
