@@ -23,6 +23,8 @@ import { MatButtonModule } from '@angular/material/button'
 })
 export class AppComponent implements OnInit {
     isLoggedIn: boolean = false
+    isAddMode: boolean = false
+    isEditMode: boolean = false
     constructor(private storageService: StorageService) {}
 
     ngOnInit(): void {

@@ -1,23 +1,3 @@
-<style>
-    main {
-        width: 100%;
-        min-height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 1rem;
-        box-sizing: inherit;
-        position: relative;
-    }
-    .content {
-        display: flex;
-        justify-content: space-around;
-        width: 100%;
-        max-width: 700px;
-        margin-bottom: 3rem;
-    }
-</style>
-
 <main class="main">
     <button
         mat-raised-button
@@ -31,9 +11,10 @@
             <app-login (loginStatus)="changeLoginStatus($event)"></app-login>
         </div>
         <ng-template #loggedIn>
-            <!-- <app-user-table></app-user-table> -->
+            <app-user-table *ngIf="!isAddMode && !isEditMode; else formView"></app-user-table>
             <!-- <app-form></app-form> -->
-            <router-outlet></router-outlet>
+            <ng-template #formView></ng-template>
+            <!-- <router-outlet></router-outlet> -->
         </ng-template>
     </div>
 </main>
