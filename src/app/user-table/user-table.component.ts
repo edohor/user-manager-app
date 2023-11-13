@@ -1,69 +1,123 @@
-import { Component, Input } from '@angular/core'
-import { MatTableDataSource } from '@angular/material/table'
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { SelectionModel } from '@angular/cdk/collections'
-import { MatIconRegistry } from '@angular/material/icon'
-import { DomSanitizer } from '@angular/platform-browser'
+import { StorageService } from '../storage.service'
+import { MatButtonModule } from '@angular/material/button'
+import { Router } from '@angular/router'
 
 export interface UserData {
-    name: string
+    id: string
+    firstName: string
     lastName: string
     email: string
-    phoneNumber: string
+    phone: string
 }
 
 @Component({
     selector: 'app-user-table',
     templateUrl: './user-table.component.html',
     styleUrls: ['./user-table.component.scss'],
+    standalone: true,
+    imports: [CommonModule, MatButtonModule],
 })
 export class UserTableComponent {
-    @Input() data: UserData[] = []
+    @Input() dataSource: Array<UserData> = []
+    selectedRows: SelectionModel<UserData>
+    isEditButtonDisabled: boolean = true
+    isDeleteButtonDisabled: boolean = true
+
     constructor(
-        private matIconRegistry: MatIconRegistry,
-        private domSanitizer: DomSanitizer,
+        private storageService: StorageService,
+        private router: Router,
     ) {
-        this.matIconRegistry.addSvgIcon(
-            'edit',
-            this.domSanitizer.bypassSecurityTrustResourceUrl('assets/edit.svg'),
-        )
-        this.matIconRegistry.addSvgIcon(
-            'delete',
-            this.domSanitizer.bypassSecurityTrustResourceUrl(
-                'assets/delete.svg',
-            ),
-        )
+        this.selectedRows = new SelectionModel<UserData>(true, [])
+        this.getData()
+        this.selectedRows.changed.subscribe(() => {
+            this.updateButtonStates()
+        })
     }
 
-    displayedColumns: string[] = [
-        'select',
-        'name',
-        'lastName',
-        'email',
-        'phoneNumber',
-        'actions',
-    ]
-    dataSource = new MatTableDataSource<UserData>(this.data)
-    selection = new SelectionModel<UserData>(true, [])
+    getData() {
+        const storedData = this.storageService.getData('tableData')
+        if (storedData) {
+            this.dataSource = storedData
+        }
+    }
+
+    updateButtonStates() {
+        this.isEditButtonDisabled = this.selectedRows.selected.length !== 1
+        this.isDeleteButtonDisabled = this.selectedRows.selected.length === 0
+    }
 
     masterToggle() {
-        // Logic for selecting/deselecting all rows
         this.isAllSelected()
-            ? this.selection.clear()
-            : this.dataSource.data.forEach((row) => this.selection.select(row))
+            ? this.selectedRows.clear()
+            : this.dataSource.forEach((row) => this.selectedRows.select(row))
     }
 
     isAllSelected() {
-        // Logic to check if all rows are selected
-        const numSelected = this.selection.selected.length
-        const numRows = this.dataSource.data.length
+        const numSelected = this.selectedRows.selected
+            .length as unknown as number
+        const numRows = this.dataSource.length
         return numSelected === numRows
     }
 
-    editRow(row: UserData) {
-        // Logic to edit a row
+    selectionToggle(row: UserData) {
+        this.selectedRows.toggle(row)
     }
 
-    deleteRow(row: UserData) {
-        // Logic to delete a row
+    isSelected(row: UserData) {
+        return this.selectedRows.isSelected(row)
+    }
+
+    editRow(rowData?: UserData) {
+        const selectedRow = rowData ? rowData : this.selectedRows.selected[0]
+        if (selectedRow) {
+            const allUsers: UserData[] =
+                this.storageService.getData('tableData') || []
+
+            const foundUser = allUsers.find(
+                (user) => user.id === selectedRow.id,
+            )
+            if (foundUser) {
+                this.router.navigate(['/edit'], {
+                    state: { selectedRow: foundUser },
+                })
+            }
+        }
+    }
+
+    deleteRow(rowToDelete: UserData) {
+        if (rowToDelete) {
+            const allUsers: UserData[] =
+                this.storageService.getData('tableData') || []
+            const updatedUsers = allUsers.filter(
+                (user) => user.id !== rowToDelete.id,
+            )
+
+            this.storageService.setData('tableData', updatedUsers)
+            this.getData()
+        }
+    }
+
+    addUser() {
+        this.router.navigate(['/add'])
+    }
+
+    deleteUsers() {
+        const selectedData = this.selectedRows.selected
+        const allUsers: UserData[] =
+            this.storageService.getData('tableData') || []
+
+        selectedData.forEach((row: UserData) => {
+            const index = allUsers.findIndex((item) => item.id === row.id)
+            if (index > -1) {
+                allUsers.splice(index, 1)
+            }
+        })
+
+        this.storageService.setData('tableData', allUsers)
+        this.getData()
+        this.selectedRows.clear()
     }
 }

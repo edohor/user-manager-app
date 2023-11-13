@@ -10,7 +10,7 @@ const routes: Routes = [
     { path: 'list', component: UserTableComponent },
     { path: 'add', component: FormComponent },
     { path: 'edit', component: FormComponent },
-    { path: '**', redirectTo: '/list' }
+    { path: '**', redirectTo: '/list' },
 ]
 
 @NgModule({

@@ -10,10 +10,13 @@ main {
 }
 .content {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     width: 100%;
-    max-width: 700px;
+    // max-width: 700px;
     margin-bottom: 3rem;
+    align-self: flex-start;
+    margin-top: 100px;
+    padding: 100px;
 }
 .logout-button {
     position: absolute;

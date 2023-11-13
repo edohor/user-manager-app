@@ -1,1 +1,70 @@
-<p>form works!</p>
+<form
+    [formGroup]="userForm"
+    (ngSubmit)="onSubmit()"
+    class="user-form"
+>
+    <mat-form-field>
+        <div>First Name</div>
+        <input
+            matInput
+            placeholder="First Name"
+            formControlName="firstName"
+        />
+        <mat-error *ngIf="formErrors['firstName']">
+            {{ formErrors['firstName'] }}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <div>Last Name</div>
+        <input
+            matInput
+            placeholder="Last Name"
+            formControlName="lastName"
+        />
+        <mat-error *ngIf="formErrors['lastName']">
+            Last name is required
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <div>Email</div>
+        <input
+            matInput
+            type="email"
+            placeholder="Email"
+            formControlName="email"
+        />
+        <mat-error *ngIf="formErrors['email']">
+            Enter a valid email address
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <div>Phone</div>
+        <input
+            matInput
+            type="tel"
+            placeholder="Phone"
+            formControlName="phone"
+        />
+        <mat-error *ngIf="formErrors['phone']">
+            Enter a valid phone number
+        </mat-error>
+    </mat-form-field>
+
+    <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+    >
+        Save
+    </button>
+    <button
+        mat-raised-button
+        color="secondary"
+        (click)="returnToTableView()"
+    >
+        Cancel
+    </button>
+</form>

@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material/input'
 import { MatFormFieldModule } from '@angular/material/form-field'
 import { MatButtonModule } from '@angular/material/button'
 import { StorageService } from '../storage.service'
+import { DataService } from '../data.service'
 
 @Component({
     selector: 'app-login',
@@ -18,12 +19,15 @@ import { StorageService } from '../storage.service'
         MatButtonModule,
     ],
     templateUrl: './login.component.html',
-    styleUrl: './login.component.scss',
+    styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
     @Output() loginStatus = new EventEmitter<boolean>()
 
-    constructor(private storageService: StorageService) {}
+    constructor(
+        private storageService: StorageService,
+        private dataService: DataService,
+    ) {}
 
     username: string = ''
     password: string = ''
@@ -37,6 +41,7 @@ export class LoginComponent implements OnInit {
 
     changeLoginStatus(): void {
         const data = true
+        this.dataService.sendData(data)
         this.loginStatus.emit(data)
     }
 
@@ -51,7 +56,11 @@ export class LoginComponent implements OnInit {
 
         if (!this.password) {
             this.passwordValidationMessage = 'Password is required.'
-        } else if (this.password !== this.storedData.password) {
+        } else if (
+            this.password !== this.storedData.password ||
+            !this.username ||
+            this.username !== this.storedData.username
+        ) {
             this.passwordValidationMessage = 'Password is incorrect'
         } else {
             this.passwordValidationMessage = ''
