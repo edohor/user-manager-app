@@ -9,6 +9,7 @@
             matInput
             placeholder="First Name"
             formControlName="firstName"
+            maxlength="30"
         />
         <mat-error *ngIf="formErrors['firstName']">
             {{ formErrors['firstName'] }}
@@ -21,6 +22,7 @@
             matInput
             placeholder="Last Name"
             formControlName="lastName"
+            maxlength="30"
         />
         <mat-error *ngIf="formErrors['lastName']">
             Last name is required
@@ -34,6 +36,7 @@
             type="email"
             placeholder="Email"
             formControlName="email"
+            maxlength="30"
         />
         <mat-error *ngIf="formErrors['email']">
             Enter a valid email address
@@ -47,6 +50,7 @@
             type="tel"
             placeholder="Phone"
             formControlName="phone"
+            maxlength="15"
         />
         <mat-error *ngIf="formErrors['phone']">
             Enter a valid phone number

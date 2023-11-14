@@ -1,9 +1,30 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
+import {
+    Component,
+    Input,
+    OnChanges,
+    SimpleChanges,
+    ViewChild,
+    AfterViewInit,
+    OnInit,
+} from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { SelectionModel } from '@angular/cdk/collections'
 import { StorageService } from '../storage.service'
 import { MatButtonModule } from '@angular/material/button'
 import { Router } from '@angular/router'
+import { MatTableModule, MatTableDataSource } from '@angular/material/table'
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatIconModule } from '@angular/material/icon'
+import {
+    FormsModule,
+    FormBuilder,
+    FormGroup,
+    FormControl,
+    ReactiveFormsModule,
+} from '@angular/forms'
+import { MatSort } from '@angular/material/sort'
+import { PageEvent, MatPaginatorModule } from '@angular/material/paginator'
+import { MatInputModule } from '@angular/material/input'
 
 export interface UserData {
     id: string
@@ -18,13 +39,30 @@ export interface UserData {
     templateUrl: './user-table.component.html',
     styleUrls: ['./user-table.component.scss'],
     standalone: true,
-    imports: [CommonModule, MatButtonModule],
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatIconModule,
+        FormsModule,
+        MatInputModule,
+    ],
 })
 export class UserTableComponent {
-    @Input() dataSource: Array<UserData> = []
+    dataSource: Array<UserData> = []
+    filteredDataSource: Array<UserData> = []
     selectedRows: SelectionModel<UserData>
     isEditButtonDisabled: boolean = true
     isDeleteButtonDisabled: boolean = true
+    displayedColumns: string[] = [
+        'select',
+        'firstName',
+        'lastName',
+        'email',
+        'phone',
+        'actions',
+    ]
 
     constructor(
         private storageService: StorageService,
@@ -37,10 +75,15 @@ export class UserTableComponent {
         })
     }
 
+    ngOnInit() {
+        this.filteredDataSource = this.dataSource.slice()
+    }
+
     getData() {
         const storedData = this.storageService.getData('tableData')
         if (storedData) {
             this.dataSource = storedData
+            this.filteredDataSource = storedData.slice()
         }
     }
 

@@ -24,50 +24,131 @@
             Delete
         </button>
     </div>
-    <table class="table">
-        <tr class="table-head-row">
-            <td class="table-checkbox">
-                <input
-                    type="checkbox"
-                    (change)="masterToggle()"
+
+    <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+    >
+        <ng-container matColumnDef="select">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+            >
+                <mat-checkbox
                     [checked]="isAllSelected()"
-                />
-            </td>
-            <td class="table-head-item">Name</td>
-            <td class="table-head-item">Last Name</td>
-            <td class="table-head-item">Email</td>
-            <td class="table-head-item">Phone</td>
-            <td class="table-head-item">Actions</td>
-        </tr>
-        <tr
-            *ngFor="let row of dataSource"
-            class="table-body-row"
-        >
-            <td class="table-checkbox">
-                <input
-                    type="checkbox"
-                    (change)="selectionToggle(row)"
+                    (change)="masterToggle()"
+                    [indeterminate]="
+                        selectedRows.hasValue() && !isAllSelected()
+                    "
+                ></mat-checkbox>
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let row"
+            >
+                <mat-checkbox
                     [checked]="isSelected(row)"
-                />
+                    (change)="selectionToggle(row)"
+                ></mat-checkbox>
             </td>
-            <td class="table-body-item">{{ row.firstName }}</td>
-            <td class="table-body-item">{{ row.lastName }}</td>
-            <td class="table-body-item">{{ row.email }}</td>
-            <td class="table-body-item">{{ row.phone }}</td>
-            <td class="table-body-item-action">
+        </ng-container>
+
+        <ng-container matColumnDef="firstName">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+            >
+                First Name
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let row"
+            >
+                {{ row.firstName }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+            >
+                Last Name
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let row"
+            >
+                {{ row.lastName }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+            >
+                Email
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let row"
+            >
+                {{ row.email }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+            >
+                Phone
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let row"
+            >
+                {{ row.phone }}
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th
+                mat-header-cell
+                *matHeaderCellDef
+            >
+                Actions
+            </th>
+            <td
+                mat-cell
+                *matCellDef="let row"
+            >
                 <button
-                    mat-raised-button
+                    mat-icon-button
+                    color="primary"
                     (click)="editRow(row)"
                 >
-                    Edit
+                    <mat-icon>edit</mat-icon>
                 </button>
                 <button
-                    mat-raised-button
+                    mat-icon-button
+                    color="warn"
                     (click)="deleteRow(row)"
                 >
-                    Delete
+                    <mat-icon>delete</mat-icon>
                 </button>
             </td>
-        </tr>
+        </ng-container>
+
+        <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns"
+        ></tr>
+        <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+        ></tr>
     </table>
 </div>
