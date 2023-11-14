@@ -10,9 +10,6 @@
                 matInput
                 [(ngModel)]="username"
             />
-            <!-- <mat-error *ngIf="usernameValidationMessage">{{
-                usernameValidationMessage
-            }}</mat-error> -->
             <div
                 *ngIf="usernameValidationMessage"
                 class="error-message"
@@ -29,9 +26,6 @@
                 matInput
                 [(ngModel)]="password"
             />
-            <!-- <mat-error *ngIf="passwordValidationMessage">{{
-                passwordValidationMessage
-            }}</mat-error> -->
             <div
                 *ngIf="passwordValidationMessage"
                 class="error-message"

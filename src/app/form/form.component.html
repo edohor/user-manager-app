@@ -3,60 +3,64 @@
     (ngSubmit)="onSubmit()"
     class="user-form"
 >
-    <mat-form-field>
-        <div>First Name</div>
-        <input
-            matInput
-            placeholder="First Name"
-            formControlName="firstName"
-            maxlength="30"
-        />
-        <mat-error *ngIf="formErrors['firstName']">
-            {{ formErrors['firstName'] }}
-        </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-        <div>Last Name</div>
-        <input
-            matInput
-            placeholder="Last Name"
-            formControlName="lastName"
-            maxlength="30"
-        />
-        <mat-error *ngIf="formErrors['lastName']">
-            Last name is required
-        </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-        <div>Email</div>
-        <input
-            matInput
-            type="email"
-            placeholder="Email"
-            formControlName="email"
-            maxlength="30"
-        />
-        <mat-error *ngIf="formErrors['email']">
-            Enter a valid email address
-        </mat-error>
-    </mat-form-field>
-
-    <mat-form-field>
-        <div>Phone</div>
-        <input
-            matInput
-            type="tel"
-            placeholder="Phone"
-            formControlName="phone"
-            maxlength="15"
-        />
-        <mat-error *ngIf="formErrors['phone']">
-            Enter a valid phone number
-        </mat-error>
-    </mat-form-field>
-
+    <div>
+        <div class="form-input-title">First Name</div>
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="First Name"
+                formControlName="firstName"
+                maxlength="30"
+            />
+            <mat-error *ngIf="formErrors['firstName']">
+                {{ formErrors['firstName'] }}
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <div class="form-input-title">Last Name</div>
+        <mat-form-field>
+            <input
+                matInput
+                placeholder="Last Name"
+                formControlName="lastName"
+                maxlength="30"
+            />
+            <mat-error *ngIf="formErrors['lastName']">
+                Last name is required
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <div class="form-input-title">Email</div>
+        <mat-form-field>
+            <input
+                matInput
+                type="email"
+                placeholder="Email"
+                formControlName="email"
+                maxlength="30"
+            />
+            <mat-error *ngIf="formErrors['email']">
+                Enter a valid email address
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div>
+        <div class="form-input-title">Phone</div>
+        <mat-form-field>
+            <input
+                matInput
+                type="tel"
+                placeholder="Phone"
+                formControlName="phone"
+                maxlength="15"
+            />
+            <mat-error *ngIf="formErrors['phone']">
+                Enter a valid phone number
+            </mat-error>
+        </mat-form-field>
+    </div>
     <button
         mat-raised-button
         color="primary"

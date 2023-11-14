@@ -111,10 +111,8 @@ export class FormComponent {
         )
 
         if (existingUserIndex !== -1) {
-            // If the user already exists, replace their data with the new data
             allUsers[existingUserIndex] = newUser
         } else {
-            // If it's a new user (which shouldn't happen during editing), add them to the array
             newUser.id = this.generateNextAvailableId(allUsers)
             allUsers.push(newUser)
         }
@@ -123,13 +121,11 @@ export class FormComponent {
     }
 
     generateNextAvailableId(allUsers: User[]): string {
-        // Find the maximum ID in the array
         const maxId = allUsers.reduce((max, user) => {
             const userId = parseInt(user.id)
             return userId > max ? userId : max
         }, 0)
 
-        // Increment the max ID by 1 to get the next available ID
         return (maxId + 1).toString()
     }
 
