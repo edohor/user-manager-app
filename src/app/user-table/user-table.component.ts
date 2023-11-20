@@ -38,6 +38,7 @@ export interface UserData {
 export class UserTableComponent {
     dataSource: Array<UserData> = []
     filteredDataSource: Array<UserData> = []
+    displayingDataSource: Array<UserData> = []
     selectedRows: SelectionModel<UserData>
     isEditButtonDisabled: boolean = true
     isDeleteButtonDisabled: boolean = true
@@ -71,12 +72,15 @@ export class UserTableComponent {
         if (storedData) {
             this.dataSource = storedData
             this.length = storedData.length
-            this.onPageChange({
-                pageIndex: this.pageIndex,
-                pageSize: this.pageSize,
-                length: this.length,
-                previousPageIndex: 0,
-            })
+            this.onPageUpdate(
+                {
+                    pageIndex: this.pageIndex,
+                    pageSize: this.pageSize,
+                    length: this.length,
+                    previousPageIndex: 0,
+                },
+                this.dataSource,
+            )
         }
     }
 
@@ -86,8 +90,8 @@ export class UserTableComponent {
     }
 
     masterToggle() {
-        const data = this.filteredDataSource.length
-            ? this.filteredDataSource
+        const data = this.displayingDataSource.length
+            ? this.displayingDataSource
             : this.dataSource
         this.isAllSelected()
             ? this.selectedRows.clear()
@@ -97,8 +101,8 @@ export class UserTableComponent {
     isAllSelected() {
         const numSelected = this.selectedRows.selected
             .length as unknown as number
-        const numRows = this.filteredDataSource.length
-            ? this.filteredDataSource.length
+        const numRows = this.displayingDataSource.length
+            ? this.displayingDataSource.length
             : this.dataSource.length
         return numSelected === numRows
     }
@@ -162,14 +166,17 @@ export class UserTableComponent {
         this.selectedRows.clear()
     }
 
-    onPageChange(event: any) {
+    onPageUpdate(event: any, data?: Array<UserData>) {
+        this.selectedRows.clear()
         this.pageIndex = event.pageIndex
         this.pageSize = event.pageSize
 
         const startIndex = this.pageIndex * this.pageSize
         const endIndex = startIndex + this.pageSize
 
-        this.filteredDataSource = this.dataSource.slice(startIndex, endIndex)
+        this.displayingDataSource = this.filteredDataSource.length
+            ? this.filteredDataSource.slice(startIndex, endIndex)
+            : this.dataSource.slice(startIndex, endIndex)
     }
 
     applyFilter(event: Event) {
@@ -184,7 +191,16 @@ export class UserTableComponent {
         })
 
         this.filteredDataSource = filteredData
+        this.length = this.filteredDataSource.length
 
-        this.pageIndex = 0
+        this.onPageUpdate(
+            {
+                pageIndex: 0,
+                pageSize: this.pageSize,
+                length: this.length,
+                previousPageIndex: 0,
+            },
+            this.filteredDataSource,
+        )
     }
 }

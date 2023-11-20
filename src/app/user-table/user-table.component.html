@@ -37,7 +37,7 @@
 
     <table
         mat-table
-        [dataSource]="filteredDataSource"
+        [dataSource]="displayingDataSource"
         matSort
         class="table"
     >
@@ -168,7 +168,7 @@
         [pageIndex]="pageIndex"
         [length]="length"
         [pageSizeOptions]="pageSizeOptions"
-        (page)="onPageChange($event)"
+        (page)="onPageUpdate($event)"
         showFirstLastButtons
         aria-label="Select page"
     ></mat-paginator>
