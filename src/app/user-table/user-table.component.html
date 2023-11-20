@@ -25,9 +25,19 @@
         </button>
     </div>
 
+    <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input
+            matInput
+            (keyup)="applyFilter($event)"
+            placeholder="Search"
+            #input
+        />
+    </mat-form-field>
+
     <table
         mat-table
-        [dataSource]="dataSource"
+        [dataSource]="filteredDataSource"
         matSort
         class="table"
     >
@@ -152,4 +162,14 @@
             *matRowDef="let row; columns: displayedColumns"
         ></tr>
     </table>
+
+    <mat-paginator
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [length]="length"
+        [pageSizeOptions]="pageSizeOptions"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+        aria-label="Select page"
+    ></mat-paginator>
 </div>

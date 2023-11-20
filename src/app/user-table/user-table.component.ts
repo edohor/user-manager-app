@@ -9,6 +9,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatIconModule } from '@angular/material/icon'
 import { FormsModule } from '@angular/forms'
 import { MatInputModule } from '@angular/material/input'
+import { MatPaginatorModule } from '@angular/material/paginator'
 
 export interface UserData {
     id: string
@@ -31,6 +32,7 @@ export interface UserData {
         MatIconModule,
         FormsModule,
         MatInputModule,
+        MatPaginatorModule,
     ],
 })
 export class UserTableComponent {
@@ -47,6 +49,11 @@ export class UserTableComponent {
         'phone',
         'actions',
     ]
+    pageSizeOptions: number[] = [5, 10, 20]
+    pageSize: number = 5
+    pageIndex: number = 0
+    length: number = 0
+    filterValue: string = ''
 
     constructor(
         private storageService: StorageService,
@@ -59,15 +66,17 @@ export class UserTableComponent {
         })
     }
 
-    ngOnInit() {
-        this.filteredDataSource = this.dataSource.slice()
-    }
-
     getData() {
         const storedData = this.storageService.getData('tableData')
         if (storedData) {
             this.dataSource = storedData
-            this.filteredDataSource = storedData.slice()
+            this.length = storedData.length
+            this.onPageChange({
+                pageIndex: this.pageIndex,
+                pageSize: this.pageSize,
+                length: this.length,
+                previousPageIndex: 0,
+            })
         }
     }
 
@@ -77,15 +86,20 @@ export class UserTableComponent {
     }
 
     masterToggle() {
+        const data = this.filteredDataSource.length
+            ? this.filteredDataSource
+            : this.dataSource
         this.isAllSelected()
             ? this.selectedRows.clear()
-            : this.dataSource.forEach((row) => this.selectedRows.select(row))
+            : data.forEach((row) => this.selectedRows.select(row))
     }
 
     isAllSelected() {
         const numSelected = this.selectedRows.selected
             .length as unknown as number
-        const numRows = this.dataSource.length
+        const numRows = this.filteredDataSource.length
+            ? this.filteredDataSource.length
+            : this.dataSource.length
         return numSelected === numRows
     }
 
@@ -146,5 +160,31 @@ export class UserTableComponent {
         this.storageService.setData('tableData', allUsers)
         this.getData()
         this.selectedRows.clear()
+    }
+
+    onPageChange(event: any) {
+        this.pageIndex = event.pageIndex
+        this.pageSize = event.pageSize
+
+        const startIndex = this.pageIndex * this.pageSize
+        const endIndex = startIndex + this.pageSize
+
+        this.filteredDataSource = this.dataSource.slice(startIndex, endIndex)
+    }
+
+    applyFilter(event: Event) {
+        this.filterValue = (event.target as HTMLInputElement).value
+        const filteredData = this.dataSource.filter((item) => {
+            return (
+                item.firstName.toLowerCase().includes(this.filterValue) ||
+                item.lastName.toLowerCase().includes(this.filterValue) ||
+                item.email.toLowerCase().includes(this.filterValue) ||
+                item.phone.includes(this.filterValue)
+            )
+        })
+
+        this.filteredDataSource = filteredData
+
+        this.pageIndex = 0
     }
 }
