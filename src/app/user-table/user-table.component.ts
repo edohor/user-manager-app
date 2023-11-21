@@ -37,6 +37,29 @@ export interface UserData {
 })
 export class UserTableComponent {
     dataSource: Array<UserData> = []
+    mockedData: Array<UserData> = [
+        { id: "1", firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com', phone: '123-456-7890' },
+        { id: "2", firstName: 'Jane', lastName: 'Smith', email: 'jane.smith@example.com', phone: '987-654-3210' },
+        { id: "3", firstName: 'Alice', lastName: 'Johnson', email: 'alice.johnson@example.com', phone: '555-123-4567' },
+        { id: "4", firstName: 'Bob', lastName: 'Williams', email: 'bob.williams@example.com', phone: '789-012-3456' },
+        { id: "5", firstName: 'Eva', lastName: 'Brown', email: 'eva.brown@example.com', phone: '321-654-0987' },
+        { id: "6", firstName: 'David', lastName: 'Miller', email: 'david.miller@example.com', phone: '555-555-5555' },
+        { id: "7", firstName: 'Sophia', lastName: 'Jones', email: 'sophia.jones@example.com', phone: '777-888-9999' },
+        { id: "8", firstName: 'Chris', lastName: 'Clark', email: 'chris.clark@example.com', phone: '111-222-3333' },
+        { id: "9", firstName: 'Olivia', lastName: 'Anderson', email: 'olivia.anderson@example.com', phone: '444-444-4444' },
+        { id: "10", firstName: 'Michael', lastName: 'White', email: 'michael.white@example.com', phone: '666-777-8888' },
+        { id: "11", firstName: 'Emma', lastName: 'Taylor', email: 'emma.taylor@example.com', phone: '999-000-1111' },
+        { id: "12", firstName: 'Daniel', lastName: 'Moore', email: 'daniel.moore@example.com', phone: '222-333-4444' },
+        { id: "13", firstName: 'Grace', lastName: 'Young', email: 'grace.young@example.com', phone: '555-666-7777' },
+        { id: "14", firstName: 'William', lastName: 'Harris', email: 'william.harris@example.com', phone: '888-999-0000' },
+        { id: "15", firstName: 'Ava', lastName: 'Martin', email: 'ava.martin@example.com', phone: '111-222-3333' },
+        { id: "16", firstName: 'Liam', lastName: 'Cooper', email: 'liam.cooper@example.com', phone: '444-555-6666' },
+        { id: "17", firstName: 'Mia', lastName: 'Baker', email: 'mia.baker@example.com', phone: '777-888-9999' },
+        { id: "18", firstName: 'Jackson', lastName: 'Fisher', email: 'jackson.fisher@example.com', phone: '111-111-1111' },
+        { id: "19", firstName: 'Sophie', lastName: 'Ward', email: 'sophie.ward@example.com', phone: '222-222-2222' },
+        { id: "20", firstName: 'Henry', lastName: 'Wright', email: 'henry.wright@example.com', phone: '333-333-3333' },
+        { id: "21", firstName: 'Max', lastName: 'Turner', email: 'max.turner@example.com', phone: '444-555-6666' }
+      ]
     filteredDataSource: Array<UserData> = []
     displayingDataSource: Array<UserData> = []
     selectedRows: SelectionModel<UserData>
@@ -60,6 +83,10 @@ export class UserTableComponent {
         private storageService: StorageService,
         private router: Router,
     ) {
+        // remove saving mocked data if it's unnecessary
+        if (!this.storageService.getData('tableData')) {
+            this.storageService.setData('tableData', this.mockedData)            
+        }
         this.selectedRows = new SelectionModel<UserData>(true, [])
         this.getData()
         this.selectedRows.changed.subscribe(() => {
